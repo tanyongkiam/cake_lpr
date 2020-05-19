@@ -258,7 +258,7 @@ void main (int largc, char **largv) {
   argv = largv;
 
   unsigned long sz = 1024*1024*1024;
-  sz *= 16; //4GB heap and stack
+  sz *= 4; //4GB heap and stack
 
   heap = malloc(2*sz);
 
