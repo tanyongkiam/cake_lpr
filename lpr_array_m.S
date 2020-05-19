@@ -16,14 +16,13 @@
 
      .file        "cake.S"
 
-/* Data section -- modify the numbers to change stack/heap size */
-
-     .bss
-     .p2align 3
      .data
      .p2align 3
-cdecl(argc): .quad 0
-cdecl(argv): .quad 0
+
+cdecl(heap):     .quad 0
+cdecl(stack):    .quad 0
+cdecl(stackend): .quad 0
+
      .p2align 3
 cake_bitmaps:
 	.quad 4,24,31,15,3,62,63,48,127,126,12,255,252,1008,768,576
@@ -45,21 +44,22 @@ cake_bitmaps:
      .text
      .p2align 3
      .globl  cdecl(cml_main)
-     .globl  cdecl(argc)
-     .globl  cdecl(argv)
+     .globl  cdecl(heap)
+     .globl  cdecl(stack)
+     .globl  cdecl(stackend)
+
 cdecl(cml_main):
-     movabs  $cdecl(argc), %r9
-     movq    %rdi, 0(%r9)  # %rdi stores argc
-     movabs  $cdecl(argv), %r9
-     movq    %rsi, 0(%r9)  # %rsi stores argv
      pushq   %rbp
      movq    %rsp, %rbp  # move stack pointer
      movabs  $cake_main, %rdi        # arg1: entry address
-     movq    %rdx, %rsi              # arg2: first address of heap
+     movabs  $cdecl(heap), %r8
+     movq    0(%r8), %rsi            # arg2: first address of heap
      movabs  $cake_bitmaps, %rdx
      movq    %rdx, 0(%rsi)           # store bitmap pointer
-     movq    %rcx, %rdx              # arg3: first address of stack
-     movq    %r8, %rcx               # arg4: first address past the stack
+     movabs  $cdecl(stack), %r8
+     movq    0(%r8), %rdx            # arg3: first address of stack
+     movabs  $cdecl(stackend), %r8
+     movq    0(%r8), %rcx            # arg4: first address past the stack
      jmp     cake_main
 
 /* CakeML FFI interface (each block is 16 bytes long) */

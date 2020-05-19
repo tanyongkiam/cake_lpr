@@ -18,11 +18,14 @@
 #define STDERR_MEM_EXHAUST
 
 /* clFFI (command line) */
+unsigned int argc;
+char **argv;
 
-/* argc and argv are exported in cake.S */
-extern void cml_main(int argc, char **argv, void* heap, void* stack, void* stackend);
-extern unsigned int argc;
-extern char **argv;
+/* exported in cake.S */
+extern void cml_main(void);
+extern void *heap;
+extern void *stack;
+extern void *stackend;
 
 void ffiget_arg_count (unsigned char *c, long clen, unsigned char *a, long alen) {
   a[0] = (char) argc;
@@ -249,16 +252,19 @@ void ffidouble_toString (unsigned char *c, long clen, unsigned char *a, long ale
   assert (bytes_written <= 255);
 }
 
-void main (int argc, char **argv) {
+void main (int largc, char **largv) {
 
-  unsigned long sz = 1024*1024;
-  sz *= 4000; //4GB heap and stack
+  argc = largc;
+  argv = largv;
 
-  void* heap = malloc(2*sz);
-  void* stack = heap+sz;
-  void* stackend = stack + sz;
+  unsigned long sz = 1024*1024*1024;
+  sz *= 8; //4GB heap and stack
+
+  heap = malloc(2*sz);
+  stack = heap+sz;
+  stackend = stack + sz;
 
   // Passing control to CakeML
-  cml_main(argc,argv,heap,stack,stackend);
+  cml_main();
 }
 

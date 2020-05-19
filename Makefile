@@ -8,5 +8,5 @@ cake_lpr_array_m: basis_ffi_m.c lpr_array_m.S
 	gcc basis_ffi_m.c lpr_array_m.S -o cake_lpr_array_m -static
 
 clean:
-	rm -fv cake_lpr_array cake_lpr cake_lpr_array_malloc
+	rm -fv cake_lpr_array cake_lpr cake_lpr_array_m
 
