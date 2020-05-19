@@ -258,9 +258,18 @@ void main (int largc, char **largv) {
   argv = largv;
 
   unsigned long sz = 1024*1024*1024;
-  sz *= 4; //4GB heap and stack
+  sz *= 16; //4GB heap and stack
 
   heap = malloc(2*sz);
+
+  if(heap == NULL)
+  {
+    #ifdef STDERR_MEM_EXHAUST
+    fprintf(stderr,"malloc() failed to allocate sufficient CakeML heap and stack space.\n");
+    #endif
+    exit(3);
+  }
+
   stack = heap+sz;
   stackend = stack + sz;
 
