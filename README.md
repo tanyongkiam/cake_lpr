@@ -35,7 +35,8 @@ To use the proof checker:
 - Running the checker with a CNF file only dumps the file (after parsing): `./cake_lpr_array example.cnf`
 
   Output (stdout):
-  ```p cnf 12 22
+  ```
+  p cnf 12 22
   1 2 3 0
   4 5 6 0
   7 8 9 0
@@ -66,7 +67,8 @@ To use the proof checker:
 
 - Alternatively, set the environment variables, e.g., as follows:
 
-  ```export CML_HEAP_SIZE=4000
+  ```
+  export CML_HEAP_SIZE=4000
   export CML_STACK_SIZE=4000
   ./cake_lpr_array example.cnf example.lpr
   ```
