@@ -62,9 +62,11 @@ To use the proof checker:
   CakeML heap space exhausted.
   ```
 
+- To increase heap/stack size, modify the default values of cml_heap_sz and cml_stack_sz in basis_ffi.c.
 
-# Other Notes
+- Alternatively, set the environment variables, e.g., as follows:
 
-`make cake_lpr` builds a (mostly) functional, slower implementation of the checker
-
-`make cake_lpr_array_m` is an experimental version (potentially allowing larger heap/stack on some OSes)
+  ```export CML_HEAP_SIZE=4000
+  export CML_STACK_SIZE=4000
+  ./cake_lpr_array example.cnf example.lpr
+  ```
