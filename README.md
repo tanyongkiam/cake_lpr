@@ -7,9 +7,12 @@ Source and proof files are available in the main CakeML repository (https://gith
 
 Running `make` will build the default version of the proof checker `cake_lpr_array`
 
-To use the proof checker:
+To use the proof checker (this string is printed when `cake_lpr_array` is run with no arguments):
 
-`Usage: cake_lpr <DIMCAS formula file> <Optional: LPR proof file> <Optional: Size of clause array (if proof file given)>`
+```
+Usage: cake_lpr <DIMCAS formula file> <Optional: LPR proof file> \
+                <Optional: Size of clause array (if proof file given)>
+```
 
 # Examples
 
@@ -63,7 +66,7 @@ To use the proof checker:
   CakeML heap space exhausted.
   ```
 
-- To increase heap/stack size, modify the default values of cml_heap_sz and cml_stack_sz in basis_ffi.c.
+- To increase heap/stack size, modify the default values of `cml_heap_sz` and `cml_stack_sz` in `basis_ffi.c`.
 
 - Alternatively, set the environment variables, e.g., as follows:
 
