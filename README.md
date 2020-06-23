@@ -20,7 +20,7 @@ Usage: cake_lpr <DIMCAS formula file> <Optional: LPR proof file> \
 
   Output (stdout):
   ```
-  s UNSATISFIABLE
+  s VERIFIED UNSAT
   ```
 
 
@@ -54,7 +54,7 @@ Usage: cake_lpr <DIMCAS formula file> <Optional: LPR proof file> \
 
   Output (stdout):
   ```
-  s UNSATISFIABLE
+  s VERIFIED UNSAT
   ```
 
   Note that the array is automatically grown (up to the heap limit) by the proof checker.
