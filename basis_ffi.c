@@ -263,8 +263,8 @@ void main (int local_argc, char **local_argv) {
   char *temp; //used to store remainder of strtoul parse
 
   unsigned long sz = 1024*1024; // 1 MB unit
-  unsigned long cml_heap_sz = 4096 * sz;    // Default: 1 GB heap
-  unsigned long cml_stack_sz = 4096 * sz;   // Default: 1 GB stack
+  unsigned long cml_heap_sz = 8192 * sz;    // Default: 8 GB heap
+  unsigned long cml_stack_sz = 8192 * sz;   // Default: 8 GB stack
 
   // Read CML_HEAP_SIZE env variable (if present)
   // Warning: strtoul may overflow!
@@ -295,6 +295,24 @@ void main (int local_argc, char **local_argv) {
     #endif
     exit(3);
   }
+
+  /**
+   *  CakeML and its default assembly wrapper expects the following memory layout:
+   *
+   *  cml_heap      cml_stack      cml_stackend
+   *  |             |              |
+   *  V             v              v
+   *  |--- heap ---||--- stack ---|
+   *
+   *  The heap/stack are assumed to be in contiguous memory,
+   *  cml_heap points to the first address of the heap,
+   *  cml_stack points to 1 address past the end of the heap (i.e., the first address of the stack),
+   *  cml_stackend points to 1 address past the end of the stack.
+   *
+   *  All cml_* pointers must be word aligned.
+   *  The position cml_stack may be (slightly) dynamically adjusted by CakeML,
+   *  see `get_stack_heap_limit` in stack_removeProof
+   **/
 
   cml_heap = malloc(cml_heap_sz + cml_stack_sz); // allocate both heap and stack at once
 
