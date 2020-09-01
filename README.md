@@ -15,7 +15,7 @@ CakeML: 0b23296d34495457ed119cb1a4a27c60dd8758d0
 
 Running `make` will build the the proof checker `cake_lpr`
 
-To use the proof checker (this string is printed when `cake_lpr` is run with no arguments):
+This help string is printed to stdout when `cake_lpr` is run with no arguments:
 
 ```
 Usage: cake_lpr <DIMACS formula file> <Optional: LPR proof file> \
