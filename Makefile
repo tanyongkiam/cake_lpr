@@ -1,5 +1,5 @@
-cake_lpr_array: basis_ffi.c lpr_array.S
-	gcc basis_ffi.c lpr_array.S -o cake_lpr_array
+cake_lpr: basis_ffi.c cake_lpr.S
+	gcc basis_ffi.c cake_lpr.S -o cake_lpr
 
 clean:
-	rm -fv cake_lpr_array
+	rm -fv cake_lpr

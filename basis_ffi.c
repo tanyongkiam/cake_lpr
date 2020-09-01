@@ -19,7 +19,6 @@
 
 /* clFFI (command line) */
 
-/* argc and argv are exported in cake.S */
 unsigned int argc;
 char **argv;
 
@@ -254,30 +253,30 @@ void ffidouble_toString (unsigned char *c, long clen, unsigned char *a, long ale
   assert (bytes_written <= 255);
 }
 
-void main (int largc, char **largv) {
+void main (int local_argc, char **local_argv) {
 
-  argc = largc;
-  argv = largv;
+  argc = local_argc;
+  argv = local_argv;
 
   char *heap_env = getenv("CML_HEAP_SIZE");
   char *stack_env = getenv("CML_STACK_SIZE");
-  char *rest;
+  char *temp; //used to store remainder of strtoul parse
 
   unsigned long sz = 1024*1024; // 1 MB unit
-  unsigned long cml_heap_sz = 4096 * sz;    // Default: 4 GB heap
-  unsigned long cml_stack_sz = 4096 * sz;   // Default: 4 GB stack
+  unsigned long cml_heap_sz = 4096 * sz;    // Default: 1 GB heap
+  unsigned long cml_stack_sz = 4096 * sz;   // Default: 1 GB stack
 
   // Read CML_HEAP_SIZE env variable (if present)
-  // Warning: stroul may overflow!
+  // Warning: strtoul may overflow!
   if(heap_env != NULL)
   {
-    cml_heap_sz = strtoul(heap_env, &rest, 10);
+    cml_heap_sz = strtoul(heap_env, &temp, 10);
     cml_heap_sz *= sz; //heap size is read in units of MBs
   }
 
   if(stack_env != NULL)
   {
-    cml_stack_sz = strtol(stack_env, &rest, 10);
+    cml_stack_sz = strtoul(stack_env, &temp, 10);
     cml_stack_sz *= sz; //stack size is read in units of MBs
   }
 

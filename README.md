@@ -3,20 +3,28 @@ This repository contains pre-compiled versions of LPR proof checkers produced us
 
 Source and proof files are available in the main CakeML repository (https://github.com/CakeML/cakeml/tree/master/examples/lpr_checker)
 
-# Instructions
-
-Running `make` will build the default version of the proof checker `cake_lpr_array`
-
-To use the proof checker (this string is printed when `cake_lpr_array` is run with no arguments):
+The file `lpr.S` is built from the following repository versions
 
 ```
-Usage: cake_lpr <DIMCAS formula file> <Optional: LPR proof file> \
+HOL4: 4dace330bc39539baafc41e1ee8bc7e37df57228
+
+CakeML: 0b23296d34495457ed119cb1a4a27c60dd8758d0
+```
+
+# Instructions
+
+Running `make` will build the the proof checker `cake_lpr`
+
+To use the proof checker (this string is printed when `cake_lpr` is run with no arguments):
+
+```
+Usage: cake_lpr <DIMACS formula file> <Optional: LPR proof file> \
                 <Optional: Size of clause array (if proof file given)>
 ```
 
 # Examples
 
-- Running the checker with a CNF file and an LPR proof: `./cake_lpr_array example.cnf example.lpr`
+- Running the checker with a CNF file and an LPR proof: `./cake_lpr example.cnf example.lpr`
 
   Output (stdout):
   ```
@@ -24,7 +32,7 @@ Usage: cake_lpr <DIMCAS formula file> <Optional: LPR proof file> \
   ```
 
 
-- Running the checker with a CNF file and an incorrect LPR proof: `touch foo.lpr; ./cake_lpr_array example.cnf foo.lpr`
+- Running the checker with a CNF file and an incorrect LPR proof: `touch foo.lpr; ./cake_lpr example.cnf foo.lpr`
 
 
   Output (stderr):
@@ -35,7 +43,7 @@ Usage: cake_lpr <DIMCAS formula file> <Optional: LPR proof file> \
   Other errors are possible during LPR proof checking. These will all be reported on stderr.
 
 
-- Running the checker with a CNF file only dumps the file (after parsing): `./cake_lpr_array example.cnf`
+- Running the checker with a CNF file only dumps the file (after parsing): `./cake_lpr example.cnf`
 
   Output (stdout):
   ```
@@ -50,7 +58,7 @@ Usage: cake_lpr <DIMCAS formula file> <Optional: LPR proof file> \
   ...
   ```
 
-- Running the checker with CNF files and LPR proof and configuring the clause array size: `./cake_lpr_array example.cnf example.lpr 10000`
+- Running the checker with CNF files and LPR proof and configuring the clause array size: `./cake_lpr example.cnf example.lpr 10000`
 
   Output (stdout):
   ```
@@ -59,7 +67,7 @@ Usage: cake_lpr <DIMCAS formula file> <Optional: LPR proof file> \
 
   Note that the array is automatically grown (up to the heap limit) by the proof checker.
 
-- Running the checker with CNF files and LPR proof and configuring the clause array size (too much will give an error): `./cake_lpr_array example.cnf example.lpr 1000000000`
+- Running the checker with CNF files and LPR proof and configuring the clause array size (too much will give an error): `./cake_lpr example.cnf example.lpr 1000000000`
 
   Output (stderr):
   ```
@@ -73,5 +81,5 @@ Usage: cake_lpr <DIMCAS formula file> <Optional: LPR proof file> \
   ```
   export CML_HEAP_SIZE=4000
   export CML_STACK_SIZE=4000
-  ./cake_lpr_array example.cnf example.lpr
+  ./cake_lpr example.cnf example.lpr
   ```
