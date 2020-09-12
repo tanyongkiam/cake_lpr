@@ -1,0 +1,60 @@
+
+These instructions provide some hints for installing other tools that you may wish to benchmark against our proof checker.
+
+These have been tested on my Ubuntu 18.04 machine.
+
+Please refer to the other tool's respective installation instructions for other platforms.
+
+- SBCL (Note: required for ACL2).
+  On my Ubuntu laptop, sudo apt-get install sbcl works (v1.4.5).
+  Make sure to get a version supporting large enough memory size (i.e., 64 bits)
+  Skip instructions below if that suffices.
+
+  1) Download and unpack an SBCL binary (older releases are available):
+
+    http://www.sbcl.org/platform-table.html
+
+  2) Create an executable file called sbcl in the unpacked folder with the following lines
+    (replace ~/sbcl/ with the path to the unpacked SBCL folder):
+
+    --- FILE CONTENTS ---
+    #!/bin/sh
+    ~/sbcl/src/runtime/sbcl --core ~/sbcl/output/sbcl.core --dynamic-space-size 16384 "$@"
+    --- END FILE CONTENTS ---
+
+- ACL2 (Note: must install SBCL first!)
+  1) Clone a copy of ACL2 and build the required libraries (paths may be changed as required):
+
+    git clone -b 8.2 git://github.com/acl2-devel/acl2-devel.git ~/acl2/
+    cd ~/acl2
+    make LISP=~/sbcl/sbcl
+    ~/acl2/books/build/cert.pl --acl2 ~/acl2/saved_acl2 ~/acl2/books/projects/sat/lrat/cube/*.lisp
+
+  2) Create the ACL2 executable (the LRAT checker):
+
+    cd ~/acl2/books/projects/sat/lrat/cube/
+    ~/acl2/saved_acl2
+      (include-book "run")
+      :q
+      (save-exec "cube-check" "Executable including run.lisp")
+
+- GRAT (Note: requires a MLton compiler)
+
+  mkdir -p isabelle
+  cd isabelle
+  wget https://www21.in.tum.de/~lammich/grat/gratgen.tgz
+  wget https://www21.in.tum.de/~lammich/grat/gratchk.tgz
+  tar -xvf gratgen.tgz
+  tar -xvf gratchk.tgz
+  cd gratgen ; cmake . ; make ; make install ; cd ..
+  cd gratchk/code ; make ; cd ../..
+  cd ..
+
+- Coq (Note: the OCaml code may need updating, depending on your Coq/OCaml version)
+
+  mkdir -p coq
+  cd coq
+  wget https://imada.sdu.dk/~petersk/lrat/rat-checker.tar.gz
+  tar -xvf rat-checker.tar.gz
+  cd rat-checker
+  make

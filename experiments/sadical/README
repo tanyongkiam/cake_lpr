@@ -1,0 +1,75 @@
+***
+To run the PR experiments, ensure that you have done the following:
+***
+
+- Build cake_lpr (run make in ../..)
+
+- Obtain the benchmarks and tools (run ./setup.sh)
+
+- (OPTIONAL) Install Coq, ACL2 and Isabelle checkers (see ../INSTALL_EXTERNAL for instructions as these might be platform specific)
+
+To run the benchmarks:
+
+1) Generate the LPR and LRAT proofs:
+
+  ./gen_lpr_benchmark.sh hole
+  ./gen_lpr_benchmark.sh mchess
+  ./gen_lpr_benchmark.sh Urquhart
+
+This will produce .lrat and .lpr proofs in hole/ mchess/ and Urquhart/ and timing logs in timing_logs/
+
+For example:
+
+Urquhart/Urquhart-s3-b1.shuffled.cnf
+SaDiCaL: 0.144
+dpr-trim: 0.219
+pr2drat: 0.185
+drat-trim: 0.329
+...
+
+2) Run the LPR / LRAT experiments
+
+(OPTIONAL) Note: to run ACL2 / Coq checking, set the correct paths to your installation in run_lpr_benchmark.sh
+
+  ./run_lpr_benchmark.sh hole
+  ./run_lpr_benchmark.sh mchess
+  ./run_lpr_benchmark.sh Urquhart
+
+For successful runs you should see output like this:
+
+Running Urquhart/Urquhart-s3-b1.shuffled.cnf
+Checking Urquhart/Urquhart-s3-b1.shuffled.lpr with CakeML
+s VERIFIED UNSAT
+Checking Urquhart/Urquhart-s3-b1.shuffled.lrat with CakeML
+s VERIFIED UNSAT
+Checking Urquhart/Urquhart-s3-b1.shuffled.lrat with ACL2
+... (a lot of output) ...
+s VERIFIED
+Checking Urquhart/Urquhart-s3-b1.shuffled.lrat with Coq
+Checking refutation ...
+True
+...
+
+This will produce timing logs in timing_logs/
+
+(OPTIONAL) 3) Generate and run GRAT proofs:
+
+  ./grat_benchmark hole
+  ./grat_benchmark mchess
+  ./grat_benchmark Urquhart
+
+For successful runs you should see output like this:
+
+Running Urquhart/Urquhart-s3-b1.shuffled.cnf
+Generating Urquhart/Urquhart-s3-b1.shuffled GRAT
+
+0%   10   20   30   40   50   60   70   80   90   100%
+|----|----|----|----|----|----|----|----|----|----|
+***************************************************
+Checking Urquhart/Urquhart-s3-b1.shuffled GRAT with Isabelle
+c Using split proof mode, proof read buffer size is 65536
+c Reading cnf
+c Reading lemmas
+c Done
+c Verifying unsat (split certificate)
+s VERIFIED UNSAT
