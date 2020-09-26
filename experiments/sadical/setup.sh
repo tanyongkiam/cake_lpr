@@ -32,7 +32,7 @@ cd sadical ; ./configure.sh ; make ; cd ..
 cd dpr-trim ; make ; cd ..
 
 # Build drat-trim
-cd drat-trim ; make ; make to-clrat cd ..
+cd drat-trim ; make ; make compress ; cd ..
 
 # Build pr2drat
 cd pr2drat; make ; cd ..

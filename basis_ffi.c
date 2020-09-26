@@ -263,8 +263,8 @@ int main (int local_argc, char **local_argv) {
   char *temp; //used to store remainder of strtoul parse
 
   unsigned long sz = 1024*1024; // 1 MB unit
-  unsigned long cml_heap_sz = 8192 * sz;    // Default: 8 GB heap
-  unsigned long cml_stack_sz = 8192 * sz;   // Default: 8 GB stack
+  unsigned long cml_heap_sz = 4096 * sz;    // Default: 8 GB heap
+  unsigned long cml_stack_sz = 4096 * sz;   // Default: 8 GB stack
 
   // Read CML_HEAP_SIZE env variable (if present)
   // Warning: strtoul may overflow!

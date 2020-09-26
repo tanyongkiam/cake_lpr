@@ -50,7 +50,7 @@ do
   else
     echo "Checking ${f%.*}.lrat with ACL2"
     echo -n "ACL2 checker: " >> $LOGFILE
-    time (./drat-trim/to-clrat ${f%.*}.lrat ${f%.*}.clrat ;
+    time (./drat-trim/compress ${f%.*}.lrat ${f%.*}.clrat ;
           timeout $TIMEOUT $ACL2 $f ${f%.*}.clrat $f ;
           if [ $? -eq 124 ] ; then echo -n "TIMEOUT " >> $LOGFILE; fi;
          ) 2>>$LOGFILE
