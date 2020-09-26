@@ -1,0 +1,66 @@
+***
+To run the SAT Race 2019 experiments, ensure that you have done the following:
+***
+
+- Build cake_lpr (run make in ../..)
+
+- Obtain the benchmarks and tools (run ./setup.sh)
+  NOTE: by default, we test 10 of the UNSAT benchmarks.
+  Modify setup.sh to run other benchmarks
+
+- (OPTIONAL) Install Coq, ACL2 and Isabelle checkers (see ../INSTALL_EXTERNAL for instructions as these might be platform specific)
+
+To run the benchmarks:
+
+1) Generate the LRAT proofs:
+
+  ./gen_lrat_benchmark.sh unsat
+
+This will produce .lrat proofs in unsat/ and timing logs in timing_logs/
+
+For example:
+
+unsat/ablmulub2x32o-sc2016.cnf
+CaDiCaL: 230.679
+drat-trim: 701.401
+...
+
+2) Run the LRAT experiments
+(OPTIONAL) Note: to run ACL2 / Coq checking, set the correct paths to your installation in run_lrat_benchmark.sh
+
+  ./run_lrat_benchmark.sh unsat
+
+For successful runs you should see output like this:
+
+Running unsat/6s166-sc2013.cnf
+Checking unsat/6s166-sc2013.lrat with CakeML
+s VERIFIED UNSAT
+Checking unsat/6s166-sc2013.lrat with ACL2
+... (a lot of output) ...
+s VERIFIED
+Checking unsat/6s166-sc2013.lrat with Coq
+Checking refutation ...
+True
+...
+
+This will produce timing logs in timing_logs/
+
+(OPTIONAL) 3) Generate and run GRAT proofs:
+
+  ./grat_benchmark unsat
+
+For successful runs you should see output like this:
+
+Running unsat/6s166-sc2013.cnf
+Generating unsat/6s166-sc2013 GRAT
+
+0%   10   20   30   40   50   60   70   80   90   100%
+|----|----|----|----|----|----|----|----|----|----|
+***************************************************
+Checking unsat/6s166-sc2013 GRAT with Isabelle
+c Using split proof mode, proof read buffer size is 65536
+c Reading cnf
+c Reading lemmas
+c Done
+c Verifying unsat (split certificate)
+s VERIFIED UNSAT
