@@ -1,0 +1,45 @@
+***
+To run the pgbdd-mchess experiments, ensure that you have done the following:
+***
+
+- Build cake_lpr (run make in ../..)
+
+- Obtain the benchmarks and tools (run ./setup.sh)
+
+- (OPTIONAL) Install Coq, ACL2 and Isabelle checkers (see ../INSTALL_EXTERNAL for instructions as these might be platform specific)
+
+To run the benchmarks:
+
+1) Generate the LRAT proofs:
+
+  ./gen_lrat_benchmark.sh  mchess
+
+This will produce .lrat proofs in mchess/ and Urquhart/ and timing logs in timing_logs/
+
+For example:
+
+mchess/mchess-20.cnf
+pgbdd: Node 5763.  Size = 39, Solutions = 6765. After quantification for column 0
+...
+2.647
+
+2) Run the LRAT experiments
+
+(OPTIONAL) Note: to run ACL2 / Coq checking, set the correct paths to your installation in run_lrat_benchmark.sh
+
+  ./run_lrat_benchmark.sh mchess
+
+For successful runs you should see output like this:
+
+Running mchess/mchess-20.cnf
+Checking mchess/mchess-20.lrat with CakeML
+s VERIFIED UNSAT
+Checking mchess/mchess-20.lrat with ACL2
+... (a lot of output) ...
+s VERIFIED
+Checking mchess/mchess-20.lrat with Coq
+Checking refutation ...
+True
+...
+
+This will produce timing logs in timing_logs/
