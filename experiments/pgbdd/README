@@ -14,7 +14,7 @@ To run the benchmarks:
 
   ./gen_lrat_benchmark.sh  mchess
 
-This will produce .lrat proofs in mchess/ and Urquhart/ and timing logs in timing_logs/
+This will produce .lrat proofs in mchess/ and timing logs in timing_logs/
 
 For example:
 
@@ -32,6 +32,11 @@ pgbdd: Node 5763.  Size = 39, Solutions = 6765. After quantification for column 
 For successful runs you should see output like this:
 
 Running mchess/mchess-20.cnf
+Checking mchess/mchess-20.lrat with lrat-check
+c parsed a formula with 756 variables and 2552 clauses
+c VERIFIED
+c Added clauses = 128266.  Deleted clauses = 120006.  Max live clauses = 19595
+c verification time = 0.13 secs
 Checking mchess/mchess-20.lrat with CakeML
 s VERIFIED UNSAT
 Checking mchess/mchess-20.lrat with ACL2

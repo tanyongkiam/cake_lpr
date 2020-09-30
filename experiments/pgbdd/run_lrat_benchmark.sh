@@ -7,6 +7,7 @@
 TIMEFORMAT=%R
 TIMEOUT=10000
 CAKEML=../../cake_lpr #path to cake_lpr
+LRATCHK=./drat-trim/lrat-check #path to lrat-check
 COQ=./coq/coq_lrat #path to Coq checker
 ACL2=~/acl2/books/projects/sat/lrat/cube/run.sh #path to ACL2 checker
 
@@ -28,6 +29,14 @@ for f in $1/*.cnf;
 do
   echo "Running $f"
   echo $f >> $LOGFILE
+
+  #Unverified checking
+  echo "Checking ${f%.*}.lrat with lrat-check"
+  echo -n "lrat-check: " >> $LOGFILE
+  time (timeout $TIMEOUT $LRATCHK $f ${f%.*}.lrat;
+        if [ $? -eq 124 ] ; then echo -n "TIMEOUT " >> $LOGFILE; fi;
+       ) 2>>$LOGFILE
+
   #Check LRAT file
   echo "Checking ${f%.*}.lrat with CakeML"
   echo -n "cake_lpr (lrat): " >> $LOGFILE
@@ -59,6 +68,7 @@ do
           if [ $? -eq 124 ] ; then echo -n "TIMEOUT " >> $LOGFILE; fi;
          ) 2>>$LOGFILE
   fi
+
 done
 
 
