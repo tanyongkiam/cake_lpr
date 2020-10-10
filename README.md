@@ -1,17 +1,18 @@
 # TACAS 2021 Artifact Evaluation
 
-This branch contains the artifact for the submission `cake_lpr: Verified Propagation Redundancy Checking in CakeML'
+This branch contains the artifact for the submission `cake_lpr: Verified Propagation Redundancy Checking in CakeML`
 
-The standard build instructions for `cake_lpr` can be found in this README.
+The standard build instructions for the tool `cake_lpr` can be found in this README (below).
 
 To run the experiments, please read the respective READMEs in:
 
-`experiments/sadical` (Section 5.1)
+`experiments/sadical` (corresponds to Section 5.1)
 
-`experiments/satrace2019` (Section 5.2)
+`experiments/satrace2019` (corresponds to Section 5.2)
 
-`experiments/pgbdd` (Section 5.3)
+`experiments/pgbdd` (corresponds to Section 5.3)
 
+Please email the authors if you have trouble with this artifact submission.
 
 # cake_lpr
 
