@@ -7,8 +7,8 @@
 TIMEFORMAT=%R
 TIMEOUT=5000
 CAKEML=../../cake_lpr #path to cake_lpr
-COQ=./coq/coq_lrat #path to Coq checker
-ACL2=~/acl2/books/projects/sat/lrat/cube/run.sh #path to ACL2 checker
+#COQ=./coq/coq_lrat #path to Coq checker
+#ACL2=~/acl2/books/projects/sat/lrat/cube/run.sh #path to ACL2 checker
 
 LOGFILE=timing_logs/run_lrat_benchmark_timing_$1.log
 
