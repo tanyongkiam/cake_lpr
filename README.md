@@ -3,12 +3,12 @@ This repository contains pre-compiled versions of LPR proof checkers produced us
 
 Source and proof files are available in the main CakeML repository (https://github.com/CakeML/cakeml/tree/master/examples/lpr_checker)
 
-The file `cake_lpr.S` is built from the following repository versions
+The current version of the file `cake_lpr.S` is built from the following repository versions
 
 ```
-HOL4: 841cced433cd0e9e4913c6e9c05c9b7542e38a6b
+HOL4: c45b5d91d4ced684f5db44391046ff719bf56fed
 
-CakeML: 018eec673b8b703adeecb85ccab09ec91be05cb3
+CakeML: 3157c56dfe1eab23ef37b3cefb8fca2cced396c5
 ```
 
 # Instructions

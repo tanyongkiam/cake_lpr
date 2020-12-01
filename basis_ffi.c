@@ -263,8 +263,8 @@ int main (int local_argc, char **local_argv) {
   char *temp; //used to store remainder of strtoul parse
 
   unsigned long sz = 1024*1024; // 1 MB unit
-  unsigned long cml_heap_sz = 4096 * sz;    // Default: 8 GB heap
-  unsigned long cml_stack_sz = 4096 * sz;   // Default: 8 GB stack
+  unsigned long cml_heap_sz = 4096 * sz;    // Default: 4 GB heap
+  unsigned long cml_stack_sz = 4096 * sz;   // Default: 4 GB stack
 
   // Read CML_HEAP_SIZE env variable (if present)
   // Warning: strtoul may overflow!
@@ -288,10 +288,10 @@ int main (int local_argc, char **local_argv) {
     exit(3);
   }
 
-  if(cml_heap_sz + cml_stack_sz < cml_heap_sz)
+  if(cml_heap_sz + cml_stack_sz < 8192) // Global minimum heap/stack for CakeML. 4096 for 32-bit architectures
   {
     #ifdef STDERR_MEM_EXHAUST
-    fprintf(stderr,"Overflow in requested heap (%lu) + stack (%lu) size in bytes.\n",cml_heap_sz, cml_stack_sz);
+    fprintf(stderr,"Too small requested heap (%lu) + stack (%lu) size in bytes.\n",cml_heap_sz, cml_stack_sz);
     #endif
     exit(3);
   }
