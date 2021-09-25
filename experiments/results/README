@@ -1,0 +1,13 @@
+This directory contains timing data from the benchmark suites for our paper:
+
+cake_lpr: Verified Propagation Redundancy Checking in CakeML
+
+https://doi.org/10.4230/LIPIcs.ITP.2021.14
+
+See the paper for details on the machines and tools used.
+
+- sadical.csv has results for the sadical/ benchmarks (Section 5.1 in paper)
+
+- satrace2019.csv has results for the satrace2019/ benchmarks (Section 5.2 in paper)
+
+- pgbdd.csv has results for the pgbdd/ benchmarks (Section 5.2 in paper)
