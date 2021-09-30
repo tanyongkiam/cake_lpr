@@ -6,9 +6,9 @@ Source and proof files are available in the main CakeML repository (https://gith
 The file `cake_lpr.S` is built from the following repository versions
 
 ```
-HOL4: 5921a959757a023b13010b448a2cd05222e641b6
+HOL4: 424885cd3abe129d536c979db549b5efe69b23fa
 
-CakeML: 8881f24e12a03cbd4a514a5f9a96e28183ac811e
+CakeML: 82e40ae78a115fa5a1954355cd4852d325a44c4f
 ```
 
 # Instructions
@@ -18,8 +18,21 @@ Running `make` will build the the proof checker `cake_lpr`
 This help string is printed to stdout when `cake_lpr` is run with no arguments:
 
 ```
-Usage: cake_lpr <DIMACS formula file> <Optional: LPR proof file> \
-                <Optional: Size of clause array (if proof file given)>
+Usage:  cake_lpr <DIMACS formula file>
+Parses the DIMACS file and prints the parsed formula.
+
+Usage:  cake_lpr <DIMACS formula file> <LPR proof file>
+Run LPR unsatisfiability proof checking
+
+Usage:  cake_lpr <DIMACS formula file> <LPR proof file> <DIMACS transformation file>
+Run LPR transformation proof checking
+
+Usage:  cake_lpr <DIMACS formula file> <summary proof file> i-j <LPR proof file>
+Run two-level transformation proof checking for lines i-j
+
+Usage:  cake_lpr <DIMACS formula file> <summary proof file> -check <output file>
+Check that output intervals cover all lines of summary proof file
+
 ```
 
 # Examples
@@ -58,16 +71,7 @@ Usage: cake_lpr <DIMACS formula file> <Optional: LPR proof file> \
   ...
   ```
 
-- Running the checker with CNF files and LPR proof and configuring the clause array size: `./cake_lpr example.cnf example.lpr 10000`
-
-  Output (stdout):
-  ```
-  s VERIFIED UNSAT
-  ```
-
-  Note that the array is automatically grown (up to the heap limit) by the proof checker.
-
-- Running the checker with CNF files and LPR proof and configuring the clause array size (too much will give an error): `./cake_lpr example.cnf example.lpr 1000000000`
+- It is possible for the checker to run out of stack/heap space on large proofs, e.g., with:
 
   Output (stderr):
   ```
