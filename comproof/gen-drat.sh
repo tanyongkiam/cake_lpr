@@ -5,7 +5,7 @@ SIZE=`wc $CUBES | awk '{print $1}'`
 
 mkdir -p drat
 
-COMP=EDP2_1161.comp
+COMP=$3
 
 rm $COMP
 

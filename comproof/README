@@ -10,9 +10,9 @@ To run the benchmarks:
 
 1) Generate the cubes:
 
-  ./gen_cubes.sh
+  ./gen-cubes.sh cubes.cu
 
-This will produce the cube file cubes.icnf e.g., containing lines:
+This will produce the cube file cubes.cu e.g., containing lines:
 
 a -360 -240 -180 -480 -420 630 200 -280 -450 675 -4110 3035 690 -3202 -504 -336 0
 a -360 -240 -180 -480 -420 630 200 -280 -450 675 -4110 3035 690 -3202 -504 336 -432 576 0
@@ -21,7 +21,7 @@ a -360 -240 -180 -480 -420 630 200 -280 -450 675 -4110 3035 690 -3202 -504 336 -
 
 2) Run SAT solver on all cubes and generate compositional file:
 
-  ./gen-drat.sh cnf/EDP2_1161.cnf cubes.icnf
+  ./gen-drat.sh cnf/EDP2_1161.cnf cubes.cu EDP2_1161.comp
 
 For successful runs you should see output like this:
 
