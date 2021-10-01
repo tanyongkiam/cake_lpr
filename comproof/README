@@ -1,0 +1,59 @@
+***
+To run the compositional proof, ensure that you have done the following:
+***
+
+- Build cake_lpr (run make in ..)
+
+- Obtain cube-and-conquer tools (run ./setup.sh)
+
+To run the benchmarks:
+
+1) Generate the cubes:
+
+  ./gen_cubes.sh
+
+This will produce the cube file cubes.icnf e.g., containing lines:
+
+a -360 -240 -180 -480 -420 630 200 -280 -450 675 -4110 3035 690 -3202 -504 -336 0
+a -360 -240 -180 -480 -420 630 200 -280 -450 675 -4110 3035 690 -3202 -504 336 -432 576 0
+a -360 -240 -180 -480 -420 630 200 -280 -450 675 -4110 3035 690 -3202 -504 336 -432 -576 0
+...
+
+2) Run SAT solver on all cubes and generate compositional file:
+
+  ./gen-drat.sh cnf/EDP2_1161.cnf cubes.icnf
+
+For successful runs you should see output like this:
+
+1
+c
+c This is glucose 3.0 --  based on MiniSAT (Many thanks to MiniSAT team)
+c
+c WARNING: for repeatability, setting FPU to use double precision
+c 0.00% [                    ] time remaining: 1126.09 seconds
+s UNSATISFIABLE
+
+c restarts              : 1 (83 conflicts in avg)
+c blocked restarts      : 0 (multiple: 0)
+c last block at restart : 0
+c nb ReduceDB           : 0
+c nb removed Clauses    : 0
+c nb learnts DL2        : 2
+c nb learnts size 2     : 0
+c nb learnts size 1     : 0
+c conflicts             : 83             (4824 /sec)
+c decisions             : 175            (0.00 % random) (10171 /sec)
+c propagations          : 11956          (694914 /sec)
+c conflict literals     : 1071           (13.42 % deleted)
+c nb reduced Clauses    : 0
+c CPU time              : 0.017205 s
+
+...
+
+3) Generate LRAT proofs:
+
+  ./gen-lrat.sh cnf/EDP2_1161.cnf EDP2_1161.comp
+
+4) Check with cake_lpr
+
+  ./check.sh cnf/EDP2_1161.cnf EDP2_1161.comp
