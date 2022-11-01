@@ -2,9 +2,9 @@ This directory contains timing data from the benchmark suites for our paper:
 
 cake_lpr: Verified Propagation Redundancy Checking in CakeML
 
-https://doi.org/10.4230/LIPIcs.ITP.2021.14
+https://doi.org/10.1007/978-3-030-72013-1_12
 
-See the paper for details on the machines and tools used.
+See the paper for details on the machines and tools used (note: "cam" label for camera ready version with performance improvements).
 
 - sadical.csv has results for the sadical/ benchmarks (Section 5.1 in paper)
 
