@@ -194,7 +194,9 @@ void fficlose (unsigned char *c, long clen, unsigned char *a, long alen) {
 
 /* GC FFI */
 int inGC = 0;
+#ifdef DEBUG_FFI
 struct timeval t1,t2,lastT;
+#endif
 long microsecs = 0;
 int numGC = 0;
 int hasT = 0;
