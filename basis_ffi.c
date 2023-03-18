@@ -15,6 +15,17 @@
 #include <signal.h>
 #endif
 
+/*
+ * Configurable static heap and stack sizes
+ */
+#ifndef CML_HEAP_SIZE
+  #define CML_HEAP_SIZE 4096
+#endif
+
+#ifndef CML_STACK_SIZE
+  #define CML_STACK_SIZE 4096
+#endif
+
 /* This flag is on by default. It catches CakeML's out-of-memory exit codes
  * and prints a helpful message to stderr.
  * Note that this is not specified by the basis library.
@@ -316,8 +327,8 @@ int main (int local_argc, char **local_argv) {
   char *temp; //used to store remainder of strtoul parse
 
   unsigned long sz = 1024*1024; // 1 MB unit
-  unsigned long cml_heap_sz = 4096 * sz;    // Default: 4 GB heap
-  unsigned long cml_stack_sz = 4096 * sz;   // Default: 4 GB stack
+  unsigned long cml_heap_sz = CML_HEAP_SIZE * sz;
+  unsigned long cml_stack_sz = CML_STACK_SIZE * sz;
 
   // Read CML_HEAP_SIZE env variable (if present)
   // Warning: strtoul may overflow!
