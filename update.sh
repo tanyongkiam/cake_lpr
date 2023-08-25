@@ -27,13 +27,13 @@ sed -i "s/HOL4: .*/HOL4: $HOLHASH/" README.md
 sed -i "s/CakeML: .*/CakeML: $CMLHASH/" README.md
 
 # MD5 checksum of the relevant executable files
-md5sum Makefile basis_ffi.c cake_lpr.S cake_lpr_arm8.S > cake_lpr.md5
+sha256sum Makefile basis_ffi.c cake_lpr.S cake_lpr_arm8.S > cake_lpr.sha256
 
 # Stage everything for commit
 git add HOL
 git add cakeml
 git add README.md
-git add cake_lpr.md5
+git add cake_lpr.sha256
 git add cake_lpr.S
 git add cake_lpr_arm8.S
 git add basis_ffi.c
