@@ -1,7 +1,7 @@
-all: cake_clpr
+all: cake_lpr
 
-cake_clpr: ../basis_ffi.c cake_clpr.S
-	gcc ../basis_ffi.c cake_clpr.S -o cake_clpr
+cake_lpr: ../basis_ffi.c cake_lpr.S
+	gcc ../basis_ffi.c cake_lpr.S -o cake_lpr
 
 clean:
-	rm -fv cake_clpr
+	rm -fv cake_lpr
