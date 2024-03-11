@@ -6,10 +6,12 @@ Source and proof files are available in the main CakeML repository (https://gith
 The file `cake_lpr.S` is built from the following repository versions
 
 ```
-HOL4: c505f5761a545a06f2a80c536262e608021c3955
+HOL4: 772a64a23fab01445886a113b810bd3c02930e63
 
-CakeML: 5696cf2a85f55b22b92cbb2810d120e9259e144e
+CakeML: 98d0d03c9e52b27a9895186563d385583deb75a2
 ```
+
+**New (11 Mar 2024):** `cake_lpr` now natively supports LRAT/LPR proof files in binary format.
 
 # Instructions
 
