@@ -1,6 +1,6 @@
 # Default build for x64
 cake_lpr: basis_ffi.c cake_lpr.S
-	gcc basis_ffi.c cake_lpr.S -o cake_lpr -std=c99 -fPIC
+	gcc basis_ffi.c cake_lpr.S -o cake_lpr -std=c99
 
 # To compile for native ARMv8 (replace gcc with your compiler)
 cake_lpr_arm8: basis_ffi.c cake_lpr_arm8.S
