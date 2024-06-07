@@ -17,7 +17,9 @@ CakeML: 98d0d03c9e52b27a9895186563d385583deb75a2
 
 Running `make` will build the the proof checker `cake_lpr`.
 
-Read the `Makefile` for variations, including building natively for ARMv8.
+To build for Mac (or other machines with ARMv8 chips), run `make cake_lpr_arm8`.
+
+Read the `Makefile` for other variations.
 
 This help string is printed to stdout when `cake_lpr` is run with no arguments:
 
