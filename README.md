@@ -11,7 +11,10 @@ HOL4: 8c4bb7e9ff0ffbaaa9058df6bf0322d96c3132dc
 CakeML: e0e8a40f04c4ebbce02bc7e9b654ca2c547f79ce
 ```
 
+# News
+
 **New (16 Feb 2025):** Improved `cake_lpr` performance by around 5-10% and reduced its compiled binary size by around 20%.
+
 **New (11 Mar 2024):** `cake_lpr` now natively supports LRAT/LPR proof files in binary format.
 
 # Instructions
