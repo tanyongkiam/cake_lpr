@@ -6,9 +6,9 @@ Source and proof files are available in the main CakeML repository (https://gith
 The file `cake_lpr.S` is built from the following repository versions
 
 ```
-HOL4: 8c4bb7e9ff0ffbaaa9058df6bf0322d96c3132dc
+HOL4: 37389f39aa1f331637b2525ad92fdba43703a13e
 
-CakeML: e0e8a40f04c4ebbce02bc7e9b654ca2c547f79ce
+CakeML: e1650fc504837c0fbd3931cc5066914ffdc9d877
 ```
 
 # News
