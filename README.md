@@ -13,6 +13,8 @@ CakeML: fb377b4bb704497c921cde68ccc8da3b4f0e9132
 
 # News
 
+**New (22 Jul 2026):** Incompatibility: heap/stack sizes are no longer read from the `CML_HEAP_SIZE`/`CML_STACK_SIZE` environment variables; pass the command-line flags `--CML_HEAP_SIZE=<n>`/`--CML_STACK_SIZE=<n>` (in MB) instead.
+
 **New (16 Feb 2025):** Improved `cake_lpr` performance by around 5-10% and reduced its compiled binary size by around 20%.
 
 **New (11 Mar 2024):** `cake_lpr` now natively supports LRAT/LPR proof files in binary format.
@@ -88,12 +90,12 @@ Check that output intervals cover all lines of summary proof file
   CakeML heap space exhausted.
   ```
 
-- To increase heap/stack size, modify the default values of `cml_heap_sz` and `cml_stack_sz` in `basis_ffi.c`.
-
-- Alternatively, set the environment variables, e.g., as follows:
+- To increase heap/stack size (in MB), pass the following flags, e.g., as follows:
 
   ```
-  export CML_HEAP_SIZE=4000
-  export CML_STACK_SIZE=4000
-  ./cake_lpr example.cnf example.lpr
+  ./cake_lpr --CML_HEAP_SIZE=4000 --CML_STACK_SIZE=4000 example.cnf example.lpr
   ```
+
+  These flags are handled by the C wrapper (`basis_ffi.c`) and are not passed on to the checker; run `./cake_lpr --h` for the wrapper's help message.
+
+- Alternatively, modify the default values of `CML_HEAP_SIZE` and `CML_STACK_SIZE` in `basis_ffi.c`.

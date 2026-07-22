@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <assert.h>
+#include <limits.h>
 #include <sys/stat.h>
 #ifdef EVAL
 #include <sys/time.h>
@@ -16,7 +17,9 @@
 #endif
 
 /*
- * Configurable static heap and stack sizes
+ * Configurable default heap and stack sizes (in MB).
+ * These can be overridden at runtime with the wrapper flags
+ * --CML_HEAP_SIZE=<n> and --CML_STACK_SIZE=<n> (see main below).
  */
 #ifndef CML_HEAP_SIZE
   #define CML_HEAP_SIZE 4096
@@ -317,31 +320,78 @@ void cml_clear() {
   __builtin___clear_cache(&cake_codebuffer_begin, &cake_codebuffer_end);
 }
 
+void print_wrapper_help (const char *progname) {
+  printf(
+    "usage: %s [--CML_HEAP_SIZE=<n>] [--CML_STACK_SIZE=<n>] [--h] <program arguments ...>\n"
+    "\n"
+    "This help message is printed by the C wrapper (basis_ffi.c) hosting the\n"
+    "CakeML program. It documents the wrapper's own flags only; it is NOT the\n"
+    "help for the underlying program itself, which receives all remaining\n"
+    "arguments unchanged.\n"
+    "\n"
+    "  --CML_HEAP_SIZE=<n>   set the CakeML heap size to <n> MB (default: %d)\n"
+    "  --CML_STACK_SIZE=<n>  set the CakeML stack size to <n> MB (default: %d)\n"
+    "  --h                   print this wrapper help message and exit\n",
+    progname, CML_HEAP_SIZE, CML_STACK_SIZE);
+}
+
+/* Parses the value of a --CML_HEAP_SIZE=/--CML_STACK_SIZE= wrapper flag,
+ * given in MB units, and returns it converted to bytes.
+ * Exits with an error unless the value is a plain decimal number whose
+ * byte count fits in an unsigned long. */
+unsigned long parse_size_flag (const char *name, const char *value, unsigned long unit) {
+  char *end;
+  if (value[0] < '0' || value[0] > '9') {
+    fprintf(stderr,"Invalid value \"%s\" for wrapper flag %s (expected a decimal number of MBs).\n",value,name);
+    exit(3);
+  }
+  unsigned long v = strtoul(value, &end, 10);
+  if (*end != '\0') {
+    fprintf(stderr,"Invalid value \"%s\" for wrapper flag %s (expected a decimal number of MBs).\n",value,name);
+    exit(3);
+  }
+  if (v > ULONG_MAX / unit) {
+    fprintf(stderr,"Too large value \"%s\" for wrapper flag %s.\n",value,name);
+    exit(3);
+  }
+  return v * unit;
+}
+
 int main (int local_argc, char **local_argv) {
-
-  argc = local_argc;
-  argv = local_argv;
-
-  char *heap_env = getenv("CML_HEAP_SIZE");
-  char *stack_env = getenv("CML_STACK_SIZE");
-  char *temp; //used to store remainder of strtoul parse
 
   unsigned long sz = 1024*1024; // 1 MB unit
   unsigned long cml_heap_sz = CML_HEAP_SIZE * sz;
   unsigned long cml_stack_sz = CML_STACK_SIZE * sz;
 
-  // Read CML_HEAP_SIZE env variable (if present)
-  // Warning: strtoul may overflow!
-  if(heap_env != NULL)
-  {
-    cml_heap_sz = strtoul(heap_env, &temp, 10);
-    cml_heap_sz *= sz; //heap size is read in units of MBs
+  // Consume the wrapper's own flags (--h, --CML_HEAP_SIZE=<n>,
+  // --CML_STACK_SIZE=<n>) from the command line; all remaining
+  // arguments are passed on to the CakeML program.
+  int cml_argc = 1;
+  for (int i = 1; i < local_argc; i++) {
+    if (strcmp(local_argv[i], "--h") == 0) {
+      print_wrapper_help(local_argv[0]);
+      exit(0);
+    }
+    else if (strncmp(local_argv[i], "--CML_HEAP_SIZE=", 16) == 0) {
+      cml_heap_sz = parse_size_flag("--CML_HEAP_SIZE", &local_argv[i][16], sz);
+    }
+    else if (strncmp(local_argv[i], "--CML_STACK_SIZE=", 17) == 0) {
+      cml_stack_sz = parse_size_flag("--CML_STACK_SIZE", &local_argv[i][17], sz);
+    }
+    else {
+      local_argv[cml_argc++] = local_argv[i];
+    }
   }
 
-  if(stack_env != NULL)
+  argc = cml_argc;
+  argv = local_argv;
+
+  if(cml_heap_sz > ULONG_MAX - cml_stack_sz) // heap + stack size must not overflow
   {
-    cml_stack_sz = strtoul(stack_env, &temp, 10);
-    cml_stack_sz *= sz; //stack size is read in units of MBs
+    #ifdef STDERR_MEM_EXHAUST
+    fprintf(stderr,"Too large requested heap (%lu) + stack (%lu) size in bytes.\n",cml_heap_sz, cml_stack_sz);
+    #endif
+    exit(3);
   }
 
   if(cml_heap_sz < sz || cml_stack_sz < sz) //At least 1MB heap and stack size
