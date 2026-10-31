@@ -3,17 +3,19 @@ This repository contains pre-compiled versions of LPR proof checkers produced us
 
 Source and proof files are available in the main CakeML repository (https://github.com/CakeML/cakeml/tree/master/examples/lpr_checker)
 
-The file `cake_lpr.S` is built from the following repository versions
+The files `cake_lpr.S` (x64) and `cake_lpr_arm8.S` (ARMv8) are built from the following repository versions
 
 ```
-HOL4: 0ae7030322cdf2b0d46dc9d5503e2d5eae2fa726
+HOL4: 9783a49979c94c401ff8c0e51b2eefae7ea95ae3
 
-CakeML: fb377b4bb704497c921cde68ccc8da3b4f0e9132
+CakeML: 665f9b21712ad093e10a404ccc2f78e64a34aeef
 ```
 
 # News
 
-**New (22 Jul 2026):** Incompatibility: heap/stack sizes are no longer read from the `CML_HEAP_SIZE`/`CML_STACK_SIZE` environment variables; pass the command-line flags `--CML_HEAP_SIZE=<n>`/`--CML_STACK_SIZE=<n>` (in MB) instead.
+**Final release (1 Nov 2026):** This is the last planned update of `cake_lpr`; it will soon be superseded by a new checker in this repository. Both checkers are rebuilt with the latest CakeML, and `basis_ffi.c` is now CakeML's standard wrapper for checkers. `make` auto-detects your architecture (x64 or ARMv8), so the `make cake_lpr_arm8` and `make starexec` targets are gone. For larger heap/stack, see options under Examples.
+
+**New (22 Jul 2026):** Incompatibility: heap/stack sizes are no longer read from the `CML_HEAP_SIZE`/`CML_STACK_SIZE` environment variables; pass the command-line flags `--CML_HEAP_SIZE=<n>`/`--CML_STACK_SIZE=<n>` (in MiB) instead.
 
 **New (16 Feb 2025):** Improved `cake_lpr` performance by around 5-10% and reduced its compiled binary size by around 20%.
 
@@ -21,15 +23,17 @@ CakeML: fb377b4bb704497c921cde68ccc8da3b4f0e9132
 
 # Instructions
 
-Running `make` will build the the proof checker `cake_lpr`.
+Running `make` will build the proof checker `cake_lpr` for the host machine: `cake_lpr.S` on x64 machines and `cake_lpr_arm8.S` on ARMv8 machines (e.g., Apple silicon Macs).
 
-To build for Mac (or other machines with ARMv8 chips), run `make cake_lpr_arm8`.
+To check the files against the released checksums, run `sha256sum -c cake_lpr.sha256` (on macOS: `shasum -a 256 -c cake_lpr.sha256`).
 
-Read the `Makefile` for other variations.
-
-This help string is printed to stdout when `cake_lpr` is run with no arguments:
+This help string is printed to stderr when `cake_lpr` is run with no arguments:
 
 ```
+cake_lpr can be invoked in several ways from the command line.
+
+The LPR proof file can optionally be in binary format.
+
 Usage:  cake_lpr <DIMACS formula file>
 Parses the DIMACS file and prints the parsed formula.
 
@@ -90,7 +94,7 @@ Check that output intervals cover all lines of summary proof file
   CakeML heap space exhausted.
   ```
 
-- To increase heap/stack size (in MB), pass the following flags, e.g., as follows:
+- The default heap/stack sizes are 4096 MiB each. To change them (in MiB), pass the following flags, e.g., as follows:
 
   ```
   ./cake_lpr --CML_HEAP_SIZE=4000 --CML_STACK_SIZE=4000 example.cnf example.lpr
@@ -98,4 +102,4 @@ Check that output intervals cover all lines of summary proof file
 
   These flags are handled by the C wrapper (`basis_ffi.c`) and are not passed on to the checker; run `./cake_lpr --h` for the wrapper's help message.
 
-- Alternatively, modify the default values of `CML_HEAP_SIZE` and `CML_STACK_SIZE` in `basis_ffi.c`.
+- Alternatively, change the defaults at compile time, e.g., `make -B CFLAGS="-O2 -DCML_HEAP_SIZE=65536 -DCML_STACK_SIZE=16384"` (`-B` forces a rebuild), or modify the default values of `CML_HEAP_SIZE` and `CML_STACK_SIZE` in `basis_ffi.c`.

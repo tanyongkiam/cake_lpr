@@ -1,19 +1,19 @@
-# Default build for x64
-cake_lpr: basis_ffi.c cake_lpr.S
-	gcc -O2 basis_ffi.c cake_lpr.S -o cake_lpr -std=c99
+CFLAGS ?= -O2
 
-# To compile for native ARMv8 (replace gcc with your compiler)
-cake_lpr_arm8: basis_ffi.c cake_lpr_arm8.S
-	gcc basis_ffi.c cake_lpr_arm8.S -o cake_lpr -std=c99
+# Pick the build for the host machine: x64 or ARMv8
+UNAME_M := $(shell uname -m)
+ifeq ($(UNAME_M),x86_64)
+CAKE_S = cake_lpr.S
+else ifeq ($(UNAME_M),arm64)
+CAKE_S = cake_lpr_arm8.S
+else ifeq ($(UNAME_M),aarch64)
+CAKE_S = cake_lpr_arm8.S
+else
+$(error Unsupported architecture $(UNAME_M): only x64 and ARMv8 are available)
+endif
 
-# armv8 version (emulation on x64)
-#cake_lpr_arm8_emu: basis_ffi.c cake_lpr_arm8.S
-#	aarch64-linux-gnu-gcc -static basis_ffi.c cake_lpr_arm8.S -o cake_lpr_arm8
-
-# Default build with 64 GB heap and 16 GB stack for starexec
-starexec: basis_ffi.c cake_lpr.S
-	gcc basis_ffi.c cake_lpr.S -o cake_lpr -std=c99 \
-	-DCML_HEAP_SIZE=65536 -DCML_STACK_SIZE=16384
+cake_lpr: basis_ffi.c $(CAKE_S)
+	$(CC) $(CFLAGS) basis_ffi.c $(CAKE_S) -o cake_lpr
 
 clean:
-	rm -fv cake_lpr cake_lpr_arm8
+	rm -fv cake_lpr
