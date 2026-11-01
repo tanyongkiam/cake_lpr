@@ -1,4 +1,98 @@
-# cake_lpr
+# cake_lpr and cake_lsr
+
+**NOTE: This branch is undergoing development.**
+
+The `cake_lsr` is a new tool implementing LSR proof checking using CakeML and its associated toolchains (https://cakeml.org/).
+
+## News
+
+**(1 Nov 2026):** First draft version of the LSR proof checker (binary only).
+
+## Instructions
+
+Running `make` will build the proof checker `cake_lsr` for the host machine: `cake_lsr.S` on x64 machines and `cake_lsr_arm8.S` on ARMv8 machines (e.g., Apple silicon Macs).
+
+Running `cake_lsr` with no arguments will print its help string.
+
+```
+cake_lsr
+
+Version details:
+Sun Nov 01 05:45:03 2026 UTC
+
+CakeML: 530b75baec6436287ff7573419d83538f0ba8477
+HOL4:   9783a49979c94c401ff8c0e51b2eefae7ea95ae3
+PolyML: Poly/ML 5.9 Release    RTS version: X86_64-5.9 (Git version v5.9-1-g39d96a2d)
+
+
+
+Usage:  cake_lsr [--] <CNF formula file> <optional: LSR proof file>
+        cake_lsr --dump [--] <CNF formula file>
+
+Run LSR unsatisfiability proof checking.
+The proof is read from the proof file if one is given, and from standard input otherwise.
+--dump parses the formula file and prints the formula.
+```
+
+It is possible to configure `cake_lsr`'s heap/stack usage.
+This is required because CakeML fully manages its own memory in a formally verified way.
+To expose these options, run `cake_lsr --h`.
+
+```
+./cake_lsr --h
+usage: ./cake_lsr [--CML_HEAP_SIZE=<n>] [--CML_STACK_SIZE=<n>] [--h] <program arguments ...>
+
+This help message is printed by the C wrapper (basis_ffi.c) hosting the
+CakeML program. It documents the wrapper's own flags only; it is NOT the
+help for the underlying program itself, which receives all remaining
+arguments unchanged.
+
+  --CML_HEAP_SIZE=<n>   set the CakeML heap size to <n> MiB (default: 4096)
+  --CML_STACK_SIZE=<n>  set the CakeML stack size to <n> MiB (default: 4096)
+  --h                   print this wrapper help message and exit
+```
+
+The default heap/stack sizes are 4096 MiB each. To change them (in MiB), pass the following flags, e.g., as follows:
+
+```
+./cake_lsr --CML_HEAP_SIZE=4000 --CML_STACK_SIZE=4000
+```
+
+Alternatively, change the defaults at compile time, e.g., `make -B CFLAGS="-O2 -DCML_HEAP_SIZE=65536 -DCML_STACK_SIZE=16384"` (`-B` forces a rebuild), or modify the default values of `CML_HEAP_SIZE` and `CML_STACK_SIZE` in `basis_ffi.c`.
+
+## Implementation Details
+
+- The tool (currently) supports binary-only proofs and aims to be compatible with both the standard LRAT binary format and the LSR binary format (https://github.com/ccodel/dsr-trim).
+
+  More specifically, an addition line starts with either `a` (byte `0x61`) or the byte `0x03` and the rest of the line as usual in the variable byte encoding for LRAT/LPR/LSR (id, clause/witness, 0, hints, 0).
+  A deletion line starts with `d` (byte `0x64`) followed by a list of IDs to delete then 0.
+  It also supports the variant used in `dsr-trim` which starts with the byte `0x04` followed by the line ID, before the IDs to be deleted; the line ID is ignored by `cake_lsr`.
+
+- There is one important format incompatibility for hints.
+  Consider an LRAT/LPR/LSR step which has a witness substitution (mapping variables to literals or true/false) and not refuted by the global hints.
+  In general, this requires a walk over each clause in the database.
+
+  - If all literals in the clause are either unmapped or mapped to true, the clause can be skipped.
+
+  - This leaves the "touched" clauses where at least one literal in it is mapped to false or to a different literal (SR).
+    ALL of these clauses require a group of hints (`-id ...`) in the stricter variant implemented by `cake_lsr`.
+
+  - In particular, `cake_lsr` does NOT allow skipping touched clauses where the trail satisfies the clause after substitution. This includes:
+    
+    1) touched clauses where the substitution maps at least one literal to true (hence it is trivially satisfied), but also has other literals touched by the substitution (mapped to false or to a different literal);
+    
+    2) touched clauses which are not trivially satisfied, but where the trail satisfies the substituted clause.
+
+- Minor incompatibilities. First, in each line the group of hints (`-id1 ... -id2 ... 0`) must name each `id` only once. Second, clauses in the input formula which are tautologies (containing a literal and its negation) are considered deleted.
+
+---
+
+**The original README for `cake_lpr` is reproduced as-is below (some parts outdated). At the moment `cake_lpr` is kept in the release for backwards compatibility (some other files have been removed but remain in git history). However, this text may be removed in the future.**
+
+**See tag: https://github.com/tanyongkiam/cake_lpr/releases/tag/cake_lpr/v1.0.0**
+
+---
+
 This repository contains pre-compiled versions of LPR proof checkers produced using the CakeML compiler and associated toolchains (https://cakeml.org/).
 
 Source and proof files are available in the main CakeML repository (https://github.com/CakeML/cakeml/tree/master/examples/lpr_checker)
